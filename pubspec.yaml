@@ -12,4 +12,6 @@ dependencies:
     sdk: flutter
   visibility_detector: ^0.3.3 
 
+  scroll_to_index: ^3.0.1
+
 

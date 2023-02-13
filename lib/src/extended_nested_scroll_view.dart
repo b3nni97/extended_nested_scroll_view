@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../extended_nested_scroll_view.dart';
@@ -747,6 +748,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     required super.pixels,
     required super.viewportDimension,
     required super.axisDirection,
+    required super.devicePixelRatio,
     required this.minRange,
     required this.maxRange,
     required this.correctionOffset,
@@ -759,6 +761,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     double? pixels,
     double? viewportDimension,
     AxisDirection? axisDirection,
+    double? devicePixelRatio,
     double? minRange,
     double? maxRange,
     double? correctionOffset,
@@ -772,6 +775,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
       viewportDimension: viewportDimension ??
           (hasViewportDimension ? this.viewportDimension : null),
       axisDirection: axisDirection ?? this.axisDirection,
+      devicePixelRatio: devicePixelRatio ?? this.devicePixelRatio,
       minRange: minRange ?? this.minRange,
       maxRange: maxRange ?? this.maxRange,
       correctionOffset: correctionOffset ?? this.correctionOffset,
@@ -1056,6 +1060,7 @@ class _NestedScrollCoordinator
       pixels: pixels,
       viewportDimension: _outerPosition!.viewportDimension,
       axisDirection: _outerPosition!.axisDirection,
+      devicePixelRatio: _outerPosition!.devicePixelRatio,
       minRange: minRange,
       maxRange: maxRange,
       correctionOffset: correctionOffset,
@@ -1361,12 +1366,19 @@ class _NestedScrollCoordinator
       '${objectRuntimeType(this, '_NestedScrollCoordinator')}(outer=$_outerController; inner=$_innerController)';
 }
 
-class _NestedScrollController extends ScrollController {
+class _NestedScrollController extends ScrollController
+    with AutoScrollControllerMixin {
   _NestedScrollController(
     this.coordinator, {
     super.initialScrollOffset,
     super.debugLabel,
-  });
+    this.suggestedRowHeight,
+    this.viewportBoundaryGetter: defaultViewportBoundaryGetter,
+    Axis? axis,
+  })  : beginGetter =
+            (axis == Axis.horizontal ? (Rect r) => r.left : (r) => r.top),
+        endGetter =
+            (axis == Axis.horizontal ? (r) => r.right : (r) => r.bottom);
 
   final _NestedScrollCoordinator coordinator;
 
@@ -1422,6 +1434,15 @@ class _NestedScrollController extends ScrollController {
     // TODO(vegorov): use instance method version of castFrom when it is available.
     return Iterable.castFrom<ScrollPosition, _NestedScrollPosition>(positions);
   }
+
+  @override
+  final double? suggestedRowHeight;
+  @override
+  final ViewportBoundaryGetter viewportBoundaryGetter;
+  @override
+  final AxisValueGetter beginGetter;
+  @override
+  final AxisValueGetter endGetter;
 }
 
 // The _NestedScrollPosition is used by both the inner and outer viewports of a
