@@ -1,36 +1,3 @@
-## 6.0.0
-
-* Migrate to 3.7.0. close #120,#115
-
-## 5.1.3
-
-* Upgrade visibility_detector to 0.33 by default.(please use `dependency_overrides: visibility_detector: 0.2.2` if your Flutter sdk is under 3.0.0)
-
-## 5.1.2
-
-* Add keyboardDismissBehavior property #97
-
-## 5.1.1
-
-* Provide ExtendedVisibilityDetector to point out which list is visible
-
-## 5.1.0
-
-* Migrate to 3.0.0
-
-## 5.0.0
-
-* Migrate to 2.5
-* Merge code from https://github.com/flutter/flutter/pull/87801
-* Fix exception that findRenderObject throw exception even mounted is true 
-
-## 4.0.0
-
-* Breaking change: 
-  1. refactor [ExtendedNestedScrollView].
-  2. add [ExtendedNestedScrollView.onlyOneScrollInBody] to solve scroll sync issues(https://github.com/flutter/flutter/issues/21868).
-  3. remove [ExtendedNestedScrollView.innerScrollPositionKeyBuilder] and [NestedScrollViewInnerScrollPositionKeyWidget].
-
 ## 3.0.1
 
 * Check scrollable state if mounted on finding key of ScrollPosition. #78
