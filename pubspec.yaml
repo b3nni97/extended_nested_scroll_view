@@ -11,5 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  scroll_to_index: ^3.0.1
+  scroll_to_index:
+    git:
+      url: https://github.com/ty-mer/scroll-to-index.git
 

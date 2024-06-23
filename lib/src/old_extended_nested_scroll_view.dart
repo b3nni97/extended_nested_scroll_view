@@ -511,7 +511,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     required double? pixels,
     required double? viewportDimension,
     required AxisDirection axisDirection,
-    required super.devicePixelRatio,
+    required double devicePixelRatio,
     required this.minRange,
     required this.maxRange,
     required this.correctionOffset,
@@ -521,6 +521,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
           pixels: pixels,
           viewportDimension: viewportDimension,
           axisDirection: axisDirection,
+          devicePixelRatio: devicePixelRatio,
         );
 
   @override
@@ -626,9 +627,11 @@ class _NestedScrollCoordinator
   bool get hasScrolledBody {
     for (final _NestedScrollPosition position in _currentInnerPositions) {
       assert(position.hasContentDimensions && position.hasPixels);
-      if (position.pixels > position.minScrollExtent) {
-        return true;
-      }
+      try {
+        if (position.pixels > position.minScrollExtent) {
+          return true;
+        }
+      } catch (_) {}
     }
     return false;
   }
