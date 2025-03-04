@@ -573,9 +573,9 @@ class _NestedScrollCoordinator
     this._floatHeaderSlivers,
   ) {
     final double initialScrollOffset = _parent?.initialScrollOffset ?? 0.0;
-    _outerController = _NestedScrollController(this,
+    _outerController = NestedScrollController(this,
         initialScrollOffset: initialScrollOffset, debugLabel: 'outer');
-    _innerController = _NestedScrollController(
+    _innerController = NestedScrollController(
       this,
       initialScrollOffset: 0.0,
       debugLabel: 'inner',
@@ -593,8 +593,8 @@ class _NestedScrollCoordinator
   final VoidCallback _onHasScrolledBodyChanged;
   final bool _floatHeaderSlivers;
 
-  late _NestedScrollController _outerController;
-  late _NestedScrollController _innerController;
+  late NestedScrollController _outerController;
+  late NestedScrollController _innerController;
 
   _NestedScrollPosition? get _outerPosition {
     if (!_outerController.hasClients) {
@@ -1118,9 +1118,9 @@ class _NestedScrollCoordinator
       '$runtimeType(outer=$_outerController; inner=$_innerController)';
 }
 
-class _NestedScrollController extends ScrollController
+class NestedScrollController extends ScrollController
     with AutoScrollControllerMixin {
-  _NestedScrollController(
+  NestedScrollController(
     this.coordinator, {
     double initialScrollOffset = 0.0,
     bool keepScrollOffset: true,
@@ -1151,6 +1151,12 @@ class _NestedScrollController extends ScrollController
 
   final _NestedScrollCoordinator coordinator;
   late Map<Key, _NestedScrollPosition> scrollPositionKeyMap;
+
+  @override
+  ScrollPosition get position {
+    return positions.first;
+  }
+
   @override
   ScrollPosition createScrollPosition(
     ScrollPhysics physics,
